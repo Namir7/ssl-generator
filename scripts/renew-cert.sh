@@ -26,7 +26,7 @@ log_datetime
 
 initial_hash=$(get_file_hash "$CERT_FILE")
 
-certbot renew --force-renewal --dry-run --logs-dir $LOGS_FILE
+certbot renew --force-renewal --dry-run
 
 new_hash=$(get_file_hash "$CERT_FILE")
 
