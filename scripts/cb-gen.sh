@@ -7,6 +7,4 @@ certbot certonly \
 --key-type rsa \
 --agree-tos \
 --noninteractive \
---register-unsafely-without-email \
---staging \
---break-my-certs
+--register-unsafely-without-email

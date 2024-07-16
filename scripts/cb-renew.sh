@@ -1,3 +1,3 @@
 #!/bin/bash
 
-certbot renew --force-renewal --noninteractive --staging
+certbot renew --force-renewal --noninteractive
