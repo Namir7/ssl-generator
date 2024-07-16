@@ -5,12 +5,40 @@ services:
     container_name: nginx
     image: nginx:1.23.3
     volumes:
-      - ./.nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./.nginx/cert.pem:/etc/cert.pem:ro
-      - ./.nginx/key.pem:/etc/key.pem:ro
+      - .nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - .nginx/cert.pem:/etc/cert.pem:ro
+      - .nginx/key.pem:/etc/key.pem:ro
     ports:
       - "80:80"
       - "443:443"
+    networks:
+      - main
+
+  certbot-gen:
+    container_name: certbot-gen
+    build:
+      context: .
+      dockerfile: dockerfile
+    command: ["sh", "/cb-gen.sh"]
+    env_file:
+      - .env
+    volumes:
+      - .certbot/:/etc/letsencrypt/
+      - ./scripts/cb-gen.sh:/cb-gen.sh
+    networks:
+      - main
+
+  certbot-renew:
+    container_name: certbot-renew
+    build:
+      context: .
+      dockerfile: dockerfile
+    command: ["sh", "/cb-renew.sh"]
+    env_file:
+      - .env
+    volumes:
+      - .certbot/:/etc/letsencrypt/
+      - ./scripts/cb-renew.sh:/cb-renew.sh
     networks:
       - main
 
