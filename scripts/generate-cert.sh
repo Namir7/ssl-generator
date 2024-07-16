@@ -1,5 +1,12 @@
 #!/bin/bash
 
-sudo ls -la /etc/letsencrypt
-
-certbot certonly --standalone --email $DOMAIN_EMAIL -d $DOMAIN_URL --cert-name=certfolder --key-type rsa --agree-tos --dry-run
+certbot certonly \
+--standalone \
+-d $DOMAIN_URL \
+--cert-name=certfolder \
+--key-type rsa \
+--agree-tos \
+--noninteractive \
+--register-unsafely-without-email \
+--staging \
+--break-my-certs

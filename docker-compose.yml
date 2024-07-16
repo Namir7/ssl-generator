@@ -13,21 +13,37 @@ services:
       - "443:443"
     networks:
       - main
-  
-  certbot:
-    container_name: certbot
+
+  certbot-gen:
+    container_name: certbot-gen
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: gen.dockerfile
+    command: ["sh", "/generate-cert.sh"]
+    env_file:
+      - .env
+    volumes:
+      - .certbot/:/etc/letsencrypt/
+      - ./scripts/generate-cert.sh:/generate-cert.sh
+    networks:
+      - main
+
+  certbot-renew:
+    container_name: certbot-renew
+    build:
+      context: .
+      dockerfile: generate.dockerfile
     env_file:
       - .env
     networks:
       - main
-    command: ["sh", "scripts/generate-cert.sh"]
+    command: ["sh", "scripts/renew-cert.sh"]
     volumes:
       - .nginx/:/etc/nginx/
       - .certbot/:/etc/letsencrypt/
       - .logs/certbot.log:/var/log/letsencrypt:rw
+
+
 
 networks:
   main:
