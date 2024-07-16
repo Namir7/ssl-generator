@@ -1,19 +1,22 @@
 #!/bin/bash
 CERT_FILE="/etc/letsencrypt/live/certfolder/fullchain.pem"
 
-generate() {
+generate() {   
    certbot certonly \
-   --standalone \
    -d $DOMAIN_URL \
+   --standalone \
    --cert-name=certfolder \
    --key-type rsa \
    --agree-tos \
    --noninteractive \
-   --register-unsafely-without-email
+   --register-unsafely-without-email \
+   # safe: --staging --break-my-certs
+   --staging --break-my-certs
 }
 
 renew() {
-   certbot renew --force-renewal --noninteractive
+   # safe: --staging --break-my-certs
+   certbot renew --force-renewal --noninteractive --staging --break-my-certs
 }
 
 

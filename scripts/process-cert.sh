@@ -11,6 +11,7 @@ get_file_hash() {
    sha256sum "$1" | awk '{ print $1 }'
 }
 
+
 echo "Start process certificate"
 log_datetime
 
