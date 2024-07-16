@@ -1,11 +1,10 @@
 #!/bin/bash
 
-LOGS_FILE='../.logs/certbot.log'
-CERT_FILE='/etc/letsencrypt/live/certfolder/fullchain.pem'
-KEY_FILE='/etc/letsencrypt/live/certfolder/privkey.pem'
+CERT_FILE='.certbot/live/certfolder/fullchain.pem'
+KEY_FILE='.certbot/live/certfolder/privkey.pem'
 
-NGINX_CONTAINER='nginx'
-NGINX_FOLDER='nginx'
+# certbot-gen or certbot-renew
+CERTBOT_CONTAINER='certbot-gen'
 
 log_datetime() {
    current_datetime=$(date +"%Y-%m-%d %H:%M:%S.%3N")
@@ -17,8 +16,8 @@ get_file_hash() {
 }
 
 copy_certs_to_nginx() {
-   cat $CERT_FILE > "$NGINX_FOLDER/cert.pem"
-   cat $KEY_FILE > "$NGINX_FOLDER/key.pem"
+   cat $CERT_FILE > ".nginx/cert.pem"
+   cat $KEY_FILE > ".nginx/key.pem"
 }
 
 echo "Start generate certificate"
@@ -26,7 +25,7 @@ log_datetime
 
 initial_hash=$(get_file_hash "$CERT_FILE")
 
-certbot renew --force-renewal --dry-run
+docker compose up $CERTBOT_CONTAINER
 
 new_hash=$(get_file_hash "$CERT_FILE")
 
@@ -34,7 +33,7 @@ if [ "$initial_hash" != "$new_hash" ]
 then
    echo "Certificate has been updated. Reloading NGINX..."
    copy_certs_to_nginx
-   docker exec "$NGINX_CONTAINER" nginx -s reload
+   docker exec -it nginx nginx -s reload
 else
    echo "No certificates has been generated"
 fi

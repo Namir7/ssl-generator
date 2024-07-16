@@ -18,13 +18,13 @@ services:
     container_name: certbot-gen
     build:
       context: .
-      dockerfile: gen.dockerfile
-    command: ["sh", "/generate-cert.sh"]
+      dockerfile: dockerfile
+    command: ["sh", "/cb-gen.sh"]
     env_file:
       - .env
     volumes:
       - .certbot/:/etc/letsencrypt/
-      - ./scripts/generate-cert.sh:/generate-cert.sh
+      - ./scripts/cb-gen.sh:/cb-gen.sh
     networks:
       - main
 
@@ -32,18 +32,15 @@ services:
     container_name: certbot-renew
     build:
       context: .
-      dockerfile: generate.dockerfile
+      dockerfile: dockerfile
+    command: ["sh", "/cb-renew.sh"]
     env_file:
       - .env
+    volumes:
+      - .certbot/:/etc/letsencrypt/
+      - ./scripts/cb-renew.sh:/cb-renew.sh
     networks:
       - main
-    command: ["sh", "scripts/renew-cert.sh"]
-    volumes:
-      - .nginx/:/etc/nginx/
-      - .certbot/:/etc/letsencrypt/
-      - .logs/certbot.log:/var/log/letsencrypt:rw
-
-
 
 networks:
   main:

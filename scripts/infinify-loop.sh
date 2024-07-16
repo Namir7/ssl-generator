@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # TODO: remove
-INTERVAL=60
+INTERVAL=120
 
 # 12 hours
 # INTERVAL=43200
