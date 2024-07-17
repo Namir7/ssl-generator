@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # 12 hours
-INTERVAL=180
-# INTERVAL=43200
+INTERVAL=43200
 
 excutable="bash scripts/process-cert.sh"
 
