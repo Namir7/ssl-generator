@@ -24,7 +24,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./nginx/:/etc/nginx/
+       - ./nginx/:/etc/nginx/
       - ./scripts:/scripts
       - ./backups:/backups
     networks:
